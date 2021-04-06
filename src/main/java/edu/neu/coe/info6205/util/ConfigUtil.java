@@ -1,4 +1,4 @@
-package edu.neu.coe.info6205;
+package edu.neu.coe.info6205.util;
 
 import com.google.common.io.Resources;
 import org.ini4j.Config;
