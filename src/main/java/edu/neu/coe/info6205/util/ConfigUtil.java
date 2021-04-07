@@ -13,7 +13,7 @@ public class ConfigUtil {
     private static final String VIRUS = "COVID19";
 
     public static float get(String key1, String key2){
-        float k = 0.0f;
+        float v = 0.0f;
         Config cfg = new Config();
         URL url = Resources.getResource(CONFIG_NAME);
         cfg.setMultiSection(true);
@@ -22,11 +22,14 @@ public class ConfigUtil {
         try {
             ini.load(url);
             Profile.Section section = ini.get(key1);
-            k = Float.parseFloat(section.get(key2));
+            String value = section.get(key2);
+            if (value!=null) {
+                v = Float.parseFloat(value);
+            }
         } catch (IOException e){
             e.printStackTrace();
         }
-        return k;
+        return v;
     }
 
     public static void main(String[] args) {
