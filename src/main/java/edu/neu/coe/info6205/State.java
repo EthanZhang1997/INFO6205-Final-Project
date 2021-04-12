@@ -10,4 +10,6 @@ public class State {
     public static int CONFIRMED = SYMPTOMATIC + 1;
     public static int QUARANTINED = CONFIRMED + 1;
     public static int DEATH = QUARANTINED + 1;
+    public static int RECOVERED = DEATH + 1;
+    public static int DESTROYED = RECOVERED + 1;
 }

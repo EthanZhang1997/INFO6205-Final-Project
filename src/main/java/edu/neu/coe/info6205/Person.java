@@ -18,12 +18,12 @@ public class Person {
     private Point p;
 
     private int infectedTime = -1;
+    private int destroyedTime = -1;
     private Virus virus = null;
 
     private boolean isMasked;
     private boolean isVaccined;
-
-    private int numOfInfections = 0;
+    private boolean isContactTraced;
 
     public Person(Point p, int state) {
         this.p = p;
@@ -61,6 +61,30 @@ public class Person {
         this.virus = v;
     }
 
+    public boolean getMaskState() {
+        return isMasked;
+    }
+
+    public void setMaskState(boolean b) {
+        this.isMasked = b;
+    }
+
+    public boolean getVaccineState() {
+        return isVaccined;
+    }
+
+    public void setVaccineState(boolean b) {
+        this.isVaccined = b;
+    }
+
+    public boolean getContactTraceState() {
+        return isContactTraced;
+    }
+
+    public void setContactTraceState(boolean b) {
+        this.isContactTraced = b;
+    }
+
     public int getInfectedTime() {
         return infectedTime;
     }
@@ -69,15 +93,12 @@ public class Person {
         this.infectedTime = t;
     }
 
-    public void randomMove() {
-        if (state == State.CONFIRMED || state == State.QUARANTINED || state == State.DEATH) {
-            return;
-        }
-        int targetX = (int) stdGaussian(10, p.getX());
-        int targetY = (int) stdGaussian(10, p.getY());
-        Point target = new Point(targetX, targetY);
-        formatCoordinate(target);
-        p = target;
+    public int getDestroyedTime() {
+        return destroyedTime;
+    }
+
+    public void setDestroyedTime(int t) {
+        this.destroyedTime = t;
     }
 
     /**
@@ -85,63 +106,28 @@ public class Person {
      */
     public void action() {
         // if this person is quarantined or dead, no need to handle him/her any more
-        if (state == State.DEATH) {
+        if (state == State.DEATH || state == State.DESTROYED) {
             return;
         }
 
         if (state == State.QUARANTINED) {
-            if (virus.getFatality() && City.dayTime >= infectedTime + virus.getDieTime()) {
-                state = State.DEATH;
-                Hospital.getInstance().dischargePatient();
-                return;
-            }
-            if (!virus.getFatality()) {
-                boolean beCured = getResultForProbability(virus.getCureRate());
-                if (beCured) {
-                    state = State.NORMAL;
-                    Hospital.getInstance().dischargePatient();
-                    return;
-                }
-            }
+            PersonAction.quarantinedPersonAction(this);
         }
 
         if (state == State.CONFIRMED) {
-            if (virus.getFatality() && City.dayTime >= infectedTime + virus.getDieTime()) {
-                state = State.DEATH;
-                return;
-            }
-
-            if (Hospital.getInstance().addPatient()) {
-                state = State.QUARANTINED;
-                return;
-            }
+            PersonAction.confirmedPersonAction(this);
         }
 
         if (state == State.SYMPTOMATIC) {
-            boolean isTested = getResultForProbability(ConfigUtil.get("TEST", "TEST_RATE"));
-            if (isTested) {
-                state = State.CONFIRMED;
-                if (Hospital.getInstance().addPatient()) {
-                    state = State.QUARANTINED;
-                    return;
-                }
-            }
-            randomMove();
+            PersonAction.symptomaticPersonAction(this);
         }
 
         if (state == State.SHADOW) {
-            if (City.dayTime >= infectedTime + virus.getShadowTime()) {
-                state = State.SYMPTOMATIC;
-            }
-            randomMove();
+            PersonAction.shadowPersonAction(this);
         }
 
-        if (state == State.NORMAL) {
-            List<Person> people = PersonPool.getInstance().personList;
-            for (Person person : people) {
-                // infect simulation, not implemented
-            }
-            randomMove();
+        if (state == State.NORMAL || state == State.RECOVERED) {
+            PersonAction.normalAndRecoveredPersonAction(this);
         }
 
     }
