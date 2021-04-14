@@ -14,9 +14,10 @@ public class City {
     // the number of days passed in the city
     public static int dayTime = 0;
 
-    public City() {
+    public City(Virus.Viruses v) {
         this.centerX = (int) ConfigUtil.get("CITY", "CENTERX");
         this.centerY = (int) ConfigUtil.get("CITY", "CENTERY");
+        PersonPool.getInstance().addInitialPatients(v);
     }
 
     // one day passes

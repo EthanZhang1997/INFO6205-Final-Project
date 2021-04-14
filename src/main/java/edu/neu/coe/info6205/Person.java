@@ -105,7 +105,7 @@ public class Person {
      * a person's action in one day
      */
     public void action() {
-        // if this person is quarantined or dead, no need to handle him/her any more
+        // if this person is destroyed or dead, no need to handle him/her any more
         if (state == State.DEATH || state == State.DESTROYED) {
             return;
         }

@@ -83,8 +83,14 @@ public class PersonAction {
             return false;
         }
 
+        // if these 2 people keep a safe distance, there won't be an infection
+        double distance = MathUtil.distance(person1.getPoint(), person2.getPoint());
+        if (distance >= ConfigUtil.get(person2.getVirus().getName(), "SAFE_DISTANCE")) {
+            return false;
+        }
+
         // infection rate is lower when people have greater distance
-        double infectionRate = Math.pow(ConfigUtil.get(person2.getVirus().getName(), "INFECTION_RATE"), MathUtil.distance(person1.getPoint(), person2.getPoint()));
+        double infectionRate = Math.pow(ConfigUtil.get(person2.getVirus().getName(), "INFECTION_RATE"), distance);
 
         // people who get vaccined have lower possibility to be infected
         if (person1.getVaccineState()) {

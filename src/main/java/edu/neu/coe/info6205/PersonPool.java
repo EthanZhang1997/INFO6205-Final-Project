@@ -54,14 +54,17 @@ public class PersonPool {
         personList.add(person);
     }
 
+    public void addInitialPatients(Virus.Viruses v) {
+        // add initial patients to the pool
+        for (int i = 0; i < ConfigUtil.get("CITY", "INITIAL_PATIENTS"); i++) {
+            addNewPersonToPool(State.SHADOW, v);
+        }
+    }
+
     private PersonPool() {
-        // add normal persons in the pool
+        // add normal persons to the pool
         for (int i = 0; i < ConfigUtil.get("CITY", "PERSON_SIZE"); i++) {
             addNewPersonToPool(State.NORMAL, null);
-        }
-
-        for (int i = 0; i < ConfigUtil.get("CITY", "INITIAL_PATIENTS"); i++) {
-            addNewPersonToPool(State.SHADOW, Virus.Viruses.COVID19);
         }
     }
 }
