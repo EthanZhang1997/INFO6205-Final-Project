@@ -112,18 +112,22 @@ public class Person {
 
         if (state == State.QUARANTINED) {
             PersonAction.quarantinedPersonAction(this);
+            return;
         }
 
         if (state == State.CONFIRMED) {
             PersonAction.confirmedPersonAction(this);
+            return;
         }
 
         if (state == State.SYMPTOMATIC) {
             PersonAction.symptomaticPersonAction(this);
+            return;
         }
 
         if (state == State.SHADOW) {
             PersonAction.shadowPersonAction(this);
+            return;
         }
 
         if (state == State.NORMAL || state == State.RECOVERED) {
