@@ -1,5 +1,7 @@
 package edu.neu.coe.info6205;
 
+import edu.neu.coe.info6205.util.ConfigUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +11,7 @@ public class Hospital {
     private int width = 600;
     private int height;
 
-    private final int capacity = 1000;
+    private final int capacity = (int) ConfigUtil.get("HOSPITAL", "CAPACITY");
     private int patients = 0;
 
     private static Hospital hospital = new Hospital();
@@ -56,12 +58,12 @@ public class Hospital {
         if (isEmpty()) {
             return;
         }
-        beds.get(patients).setEmpty(true);
+        beds.get(patients - 1).setEmpty(true);
         patients--;
     }
 
     public boolean isFull () {
-        return patients == capacity;
+        return patients >= capacity;
     }
 
     public boolean isEmpty () {

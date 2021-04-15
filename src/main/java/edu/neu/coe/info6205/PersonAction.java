@@ -46,7 +46,6 @@ public class PersonAction {
     }
 
     public static boolean selfCure(Person person1) {
-        // if the virus is fatal, make this person die in a certain day
         if (!person1.getVirus().getFatality() && person1.getVirus().getSelfCureState() &&
                 City.dayTime >= person1.getInfectedTime() + person1.getVirus().getSelfCureTime()) {
             person1.setState(State.RECOVERED);
@@ -131,6 +130,7 @@ public class PersonAction {
 
         if (beDestroyed(person1)) {
             Hospital.getInstance().dischargePatient();
+            return;
         }
 
         if (selfCure(person1)) {
