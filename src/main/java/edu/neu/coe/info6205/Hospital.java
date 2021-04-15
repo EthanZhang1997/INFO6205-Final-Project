@@ -1,7 +1,7 @@
 package edu.neu.coe.info6205;
 
 public class Hospital {
-    private final int capacity = 1000;
+    private final int capacity = 400;
     private int patients = 0;
 
     private static Hospital hospital = new Hospital();

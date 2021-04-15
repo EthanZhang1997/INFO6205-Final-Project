@@ -37,12 +37,12 @@ public class MathUtil {
         if (p.getY() < 0) {
             p.setY(0);
         }
-        if (p.getX() > ConfigUtil.get("City", "WIDTH")) {
-            p.setX((int) ConfigUtil.get("City", "WIDTH"));;
+        if (p.getX() > ConfigUtil.get("CITY", "WIDTH")) {
+            p.setX((int) ConfigUtil.get("CITY", "WIDTH"));;
         }
 
-        if (p.getY() > ConfigUtil.get("City", "HEIGHT")) {
-            p.setY((int) ConfigUtil.get("City", "WIDTH"));
+        if (p.getY() > ConfigUtil.get("CITY", "HEIGHT")) {
+            p.setY((int) ConfigUtil.get("CITY", "HEIGHT"));
         }
     }
 

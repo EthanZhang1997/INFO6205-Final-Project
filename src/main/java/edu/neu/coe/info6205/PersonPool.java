@@ -39,7 +39,7 @@ public class PersonPool {
         return i;
     }
 
-    public void addNewPersonToPool(int state) {
+    public void addNewPersonToPool(int state, Virus.Viruses v) {
         Random random = new Random();
         // randomly generate coordinates around the center
         int x = (int) (stdGaussian(100, ConfigUtil.get("CITY", "CENTERX")));
@@ -49,19 +49,22 @@ public class PersonPool {
         Person person = new Person(point, state);
         if (!(state == State.NORMAL)) {
             person.setInfectedTime(City.dayTime);
-            person.setVirus(new Virus(Virus.Viruses.COVID19));
+            person.setVirus(new Virus(v));
         }
         personList.add(person);
     }
 
-    private PersonPool() {
-        // add normal persons in the pool
-        for (int i = 0; i < ConfigUtil.get("CITY", "PERSON_SIZE"); i++) {
-            addNewPersonToPool(State.NORMAL);
-        }
-
+    public void addInitialPatients(Virus.Viruses v) {
+        // add initial patients to the pool
         for (int i = 0; i < ConfigUtil.get("CITY", "INITIAL_PATIENTS"); i++) {
-            addNewPersonToPool(State.SHADOW);
+            addNewPersonToPool(State.SHADOW, v);
+        }
+    }
+
+    private PersonPool() {
+        // add normal persons to the pool
+        for (int i = 0; i < ConfigUtil.get("CITY", "PERSON_SIZE"); i++) {
+            addNewPersonToPool(State.NORMAL, null);
         }
     }
 }
