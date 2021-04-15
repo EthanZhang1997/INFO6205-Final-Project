@@ -29,7 +29,7 @@ public class City {
         dayTime++;
     }
 
-    public void printTheStateOfCity() {
+    public static void printTheStateOfCity() {
         System.out.println("The " + dayTime + " day in the city:");
         System.out.println("The number of normal people in the city: " + PersonPool.getInstance().getPeopleSize(State.NORMAL));
         System.out.println("The number of shadowed people in the city: " + PersonPool.getInstance().getPeopleSize(State.SHADOW));
