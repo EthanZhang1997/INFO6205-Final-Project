@@ -1,9 +1,11 @@
 package edu.neu.coe.info6205;
 
 import edu.neu.coe.info6205.util.ConfigUtil;
+import edu.neu.coe.info6205.util.CsvAndPlotUtil;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -32,7 +34,7 @@ public class MyPanel extends JPanel implements Runnable{
                 g.setColor(new Color(0x14E02F));
             }
             else
-                g.setColor(new Color(0x14E02F));
+                g.setColor(new Color(0xE01414));
 
             g.fillOval(b.getX(), b.getY(), 3, 3);
         }
@@ -78,7 +80,7 @@ public class MyPanel extends JPanel implements Runnable{
         g.setColor(new Color(0xC60F6E));
         g.drawString("Symptomatic population：" + PersonPool.getInstance().getPeopleSize(State.SYMPTOMATIC), 50, y + 3 * interval);
         g.setColor(new Color(0xE01425));
-        g.drawString("Confirmed population：" + PersonPool.getInstance().getPeopleSize(State.CONFIRMED), 50, y + 4 * interval);
+        g.drawString("Confirmed population：" + (PersonPool.getInstance().getPeopleSize(State.CONFIRMED) + PersonPool.getInstance().getPeopleSize(State.QUARANTINED)), 50, y + 4 * interval);
         g.setColor(Color.black);
         g.drawString("Deaths：" + PersonPool.getInstance().getPeopleSize(State.DEATH), 50, y + 5 * interval);
         g.setColor(new Color(0x14E0E0));
@@ -105,7 +107,11 @@ public class MyPanel extends JPanel implements Runnable{
     class MyTimerTask extends TimerTask {
         @Override
         public void run() {
-            City.printTheStateOfCity();
+            try {
+                CsvAndPlotUtil.record();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             MyPanel.this.repaint();
             List<Person> people = PersonPool.getInstance().getPersonList();
             for (Person p : people) {
