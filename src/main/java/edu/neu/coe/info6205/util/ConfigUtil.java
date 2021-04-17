@@ -33,7 +33,6 @@ public class ConfigUtil {
     }
 
     public static void main(String[] args) {
-
         float k = ConfigUtil.get(VIRUS, "K");
         float r = ConfigUtil.get(VIRUS, "R");
         System.out.println(VIRUS);

@@ -14,13 +14,23 @@ public class City {
     // the number of days passed in the city
     public static int dayTime = 0;
 
+    /**
+     * @author Ethan Zhang
+     * @description constructor for this city, initialize it with center coordinate and the patients in the city
+     * @createTime  13/04/2021
+     * @param v the virus which is popular in the city
+     */
     public City(Virus.Viruses v) {
         this.centerX = (int) ConfigUtil.get("CITY", "CENTERX");
         this.centerY = (int) ConfigUtil.get("CITY", "CENTERY");
         PersonPool.getInstance().addInitialPatients(v);
     }
 
-    // one day passes
+    /**
+     * @author Ethan Zhang
+     * @description simulate one day in this city
+     * @createTime  13/04/2021
+     */
     public void dayPass() {
         List<Person> people = PersonPool.getInstance().getPersonList();
         for (Person p : people) {
@@ -29,6 +39,11 @@ public class City {
         dayTime++;
     }
 
+    /**
+     * @author Ethan Zhang
+     * @description print the state of the city in the console
+     * @createTime  13/04/2021
+     */
     public static void printTheStateOfCity() {
         System.out.println("The " + dayTime + " day in the city:");
         System.out.println("The number of normal people in the city: " + PersonPool.getInstance().getPeopleSize(State.NORMAL));

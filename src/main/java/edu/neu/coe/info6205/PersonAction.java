@@ -9,8 +9,15 @@ import static edu.neu.coe.info6205.util.MathUtil.*;
 
 public class PersonAction {
 
+    // a person's step (average distance a single person can move in one day)
     private final static int step = 10;
 
+    /**
+     * @author Ethan Zhang
+     * @description the action of a person's randomly move
+     * @createTime  13/04/2021
+     * @param person1 the person who may move
+     */
     public static void randomMove(Person person1) {
 
         // quarantined,dead and destroyed people can't move
@@ -24,7 +31,7 @@ public class PersonAction {
             return;
         }
 
-        // randomly generate a new coordinate around the former point
+        // randomly generate a new coordinate around the person's former coordinate
         int targetX = (int) stdGaussian(step, person1.getPoint().getX());
         int targetY = (int) stdGaussian(step, person1.getPoint().getY());
         Point target = new Point(targetX, targetY);
@@ -32,11 +39,19 @@ public class PersonAction {
         // format the generated coordinate
         formatCoordinate(target);
 
+        // set new coordinate for this person
         person1.setPoint(target);
     }
 
+    /**
+     * @author Ethan Zhang
+     * @description simulate a person's death
+     * @createTime  13/04/2021
+     * @param person1 the person who may die
+     * @return true if the people die, false if not die
+     */
     public static boolean die(Person person1) {
-        // if the virus is fatal, make this person die in a certain day
+        // if the virus is fatal, and the current time reaches the person's die time, make this person die
         if (person1.getVirus().getFatality() && City.dayTime >= person1.getInfectedTime() + person1.getVirus().getDieTime()) {
             person1.setState(State.DEATH);
             Hospital.getInstance().dischargePatient();
@@ -45,7 +60,16 @@ public class PersonAction {
         return false;
     }
 
+    /**
+     * @author Ethan Zhang
+     * @description simulate a person's self-cure action
+     * @createTime  13/04/2021
+     * @param person1 the person who may self-cure
+     * @return true if the people self-cure, false if not self-cure
+     */
     public static boolean selfCure(Person person1) {
+        // if the virus is not fatal, and the virus can be cured by people themselves
+        // when the current time reaches the person's self-cure time, make this person self-cure
         if (!person1.getVirus().getFatality() && person1.getVirus().getSelfCureState() &&
                 City.dayTime >= person1.getInfectedTime() + person1.getVirus().getSelfCureTime()) {
             person1.setState(State.RECOVERED);
@@ -57,8 +81,15 @@ public class PersonAction {
         return false;
     }
 
+    /**
+     * @author Ethan Zhang
+     * @description simulate a person's recover with aftereffect
+     * @createTime  13/04/2021
+     * @param person1 the person who may recover with aftereffect
+     * @return true if the people recover with aftereffect, false if not
+     */
     public static boolean beDestroyed(Person person1) {
-        // if the virus is not fatal but it can't be cured, this patient has chance to be destroyed by this virus
+        // if the virus is not fatal but it can't be cured by people themselves, this patient has chance to recover with aftereffect
         if (!person1.getVirus().getFatality() && !person1.getVirus().getSelfCureState()) {
             person1.setState(State.DESTROYED);
             person1.setDestroyedTime(City.dayTime);
@@ -70,6 +101,13 @@ public class PersonAction {
         return false;
     }
 
+    /**
+     * @author Ethan Zhang
+     * @description simulate the infection between 2 persons
+     * @createTime  13/04/2021
+     * @param person1 the person who may be infected, person2 the person who may infect others
+     * @return true if there is an infection, false if there isn't
+     */
     public static boolean infect(Person person1, Person person2) {
 
         // if the second person doesn't be infected, there won't be an infection between these 2 people
@@ -101,7 +139,7 @@ public class PersonAction {
             infectionRate *= 1 - ConfigUtil.get("Mask", "EFFICIENCY");
         }
 
-        // if the first person has antibodyies, it has lower possibility to be infected
+        // if the first person has antibodyies, he/she has lower possibility to be infected
         if (person1.getState() == State.RECOVERED) {
             infectionRate *= 1 - ConfigUtil.get(person2.getVirus().getName(), "RECOVERED_RESISTENCE");
         }
@@ -109,7 +147,7 @@ public class PersonAction {
         // get the result whether this person has been infected
         boolean isInfected = MathUtil.getResultForProbability(infectionRate);
 
-        // update the state of the newly infected patient and the infection source
+        // if there is an infection, update the state of the newly infected patient and the infection source person
         if (isInfected) {
             person1.setVirus(new Virus(Virus.Viruses.COVID19));
             person1.setState(State.SHADOW);
@@ -121,18 +159,27 @@ public class PersonAction {
         return false;
     }
 
+    /**
+     * @author Ethan Zhang
+     * @description quarantined peoples' action
+     * @createTime  13/04/2021
+     * @param person1 person with state of quarantined
+     */
     public static void quarantinedPersonAction(Person person1) {
 
+        // check if he/she would die
         if (die(person1)) {
             Hospital.getInstance().dischargePatient();
             return;
         }
 
+        // check if he/she would recover with aftereffects
         if (beDestroyed(person1)) {
             Hospital.getInstance().dischargePatient();
             return;
         }
 
+        // check if he/she would self-cure
         if (selfCure(person1)) {
             Hospital.getInstance().dischargePatient();
             return;
@@ -151,17 +198,25 @@ public class PersonAction {
         }
     }
 
+    /**
+     * @author Ethan Zhang
+     * @description confirmed peoples' action
+     * @createTime  13/04/2021
+     * @param person1 person with state of confirmed
+     */
     public static void confirmedPersonAction(Person person1) {
 
-        // if the virus is fatal, make this person die in a certain day
+        // check if he/she would die
         if (die(person1)) {
             return;
         }
 
+        // check if he/she would recover with aftereffects
         if (beDestroyed(person1)) {
             return;
         }
 
+        // check if he/she would self-cure
         if (selfCure(person1)) {
             return;
         }
@@ -173,22 +228,31 @@ public class PersonAction {
             return;
         }
 
+        // if this patient has not been contact traced, he/she may still move randomly in the city
         if (!person1.getContactTraceState()) {
             randomMove(person1);
         }
     }
 
-
+    /**
+     * @author Ethan Zhang
+     * @description symptomatic peoples' action
+     * @createTime  13/04/2021
+     * @param person1 person with state of symptomatic
+     */
     public static void symptomaticPersonAction(Person person1) {
 
+        // check if he/she would die
         if (die(person1)) {
             return;
         }
 
+        // check if he/she would recover with aftereffects
         if (beDestroyed(person1)) {
             return;
         }
 
+        // check if he/she would self-cure
         if (selfCure(person1)) {
             return;
         }
@@ -198,6 +262,7 @@ public class PersonAction {
         if (isTested) {
             person1.setState(State.CONFIRMED);
             person1.setContactTraceState(getResultForProbability(ConfigUtil.get("TEST", "CONTACT_TRACE_RATE")));
+            // if the hospital still have beds, quarantine this patient to the hospital
             if (Hospital.getInstance().addPatient()) {
                 person1.setState(State.QUARANTINED);
                 person1.setContactTraceState(false);
@@ -205,25 +270,44 @@ public class PersonAction {
             }
         }
 
+        // if this patient has not been contact traced, he/she may still move randomly in the city
         if (!person1.getContactTraceState()) {
             randomMove(person1);
         }
     }
 
+    /**
+     * @author Ethan Zhang
+     * @description shadowed peoples' action
+     * @createTime  13/04/2021
+     * @param person1 person with state of shadow
+     */
     public static void shadowPersonAction(Person person1) {
+        // if the current time reaches the virus's shadow time, this person would start performing symptomatically
         if (City.dayTime >= person1.getInfectedTime() + person1.getVirus().getShadowTime()) {
             person1.setState(State.SYMPTOMATIC);
         }
+
+        // shadowed person may move randomly in the city
         randomMove(person1);
     }
 
+    /**
+     * @author Ethan Zhang
+     * @description normal and recovered peoples' action
+     * @createTime  13/04/2021
+     * @param person1 person with state of normal or recovered
+     */
     public static void normalAndRecoveredPersonAction(Person person1) {
+        // check if there is an infection on this person
         List<Person> people = PersonPool.getInstance().personList;
         for (Person person2 : people) {
             if (infect(person1, person2)) {
                 break;
             }
         }
+
+        // normal and recovered person may move randomly in the city
         randomMove(person1);
     }
 

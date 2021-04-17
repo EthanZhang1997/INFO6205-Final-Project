@@ -25,6 +25,6 @@ public class State {
     // recovered people
     public static int RECOVERED = DEATH + 1;
 
-    // people recovered with side effects
+    // people recovered with aftereffects
     public static int DESTROYED = RECOVERED + 1;
 }

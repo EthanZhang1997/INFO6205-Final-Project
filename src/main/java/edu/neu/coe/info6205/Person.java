@@ -9,20 +9,34 @@ import java.util.Random;
 import static edu.neu.coe.info6205.util.MathUtil.*;
 
 /**
- * class for persons
+ * @author Ethan Zhang
+ * @description class for persons
+ * @createTime  13/04/2021
  */
-
 public class Person {
 
+    // the person's state
     private int state;
+
+    // the person's coordinate
     private Point p;
 
+    // the person's infected time, if the person hasn't been infected, the number is -1
     private int infectedTime = -1;
+
+    // the person's destroyed time, if the person hasn't been destroyed, the number is -1
     private int destroyedTime = -1;
+
+    // the virus this person carries
     private Virus virus = null;
 
+    // whether this person wears a mask
     private boolean isMasked;
+
+    // whether this person receives a vaccine
     private boolean isVaccined;
+
+    // whether this person has been contact traced
     private boolean isContactTraced;
 
     public Person(Point p, int state) {
@@ -102,7 +116,9 @@ public class Person {
     }
 
     /**
-     * a person's action in one day
+     * @author Ethan Zhang
+     * @description a person's action in one day, people with different states acts differently
+     * @createTime  13/04/2021
      */
     public void action() {
         // if this person is destroyed or dead, no need to handle him/her any more
@@ -110,30 +126,34 @@ public class Person {
             return;
         }
 
+        // quarantined people's action
         if (state == State.QUARANTINED) {
             PersonAction.quarantinedPersonAction(this);
             return;
         }
 
+        // confirmed people's action
         if (state == State.CONFIRMED) {
             PersonAction.confirmedPersonAction(this);
             return;
         }
 
+        // symtomatic people's action
         if (state == State.SYMPTOMATIC) {
             PersonAction.symptomaticPersonAction(this);
             return;
         }
 
+        // shadowed people's action
         if (state == State.SHADOW) {
             PersonAction.shadowPersonAction(this);
             return;
         }
 
+        // normal and recovered people's action
         if (state == State.NORMAL || state == State.RECOVERED) {
             PersonAction.normalAndRecoveredPersonAction(this);
         }
-
     }
 
 }

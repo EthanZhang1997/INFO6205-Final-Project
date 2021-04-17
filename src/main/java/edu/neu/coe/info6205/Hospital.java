@@ -11,7 +11,10 @@ public class Hospital {
     private int width = 600;
     private int height;
 
+    // the capacity for this hospital
     private final int capacity = (int) ConfigUtil.get("HOSPITAL", "CAPACITY");
+
+    // the number of patients quarantined in this hospital
     private int patients = 0;
 
     private static Hospital hospital = new Hospital();
@@ -20,14 +23,20 @@ public class Hospital {
         return hospital;
     }
 
-    private Point point = new Point(X, Y);//第一个床位所在坐标，用于给其他床位定绝对坐标
+    // the coordinate for the first bed, which is used to set absolute coordinates for other beds
+    private Point point = new Point(X, Y);
+
     private List<Bed> beds = new ArrayList<>();
 
     public List<Bed> getBeds() {
         return beds;
     }
 
-    // adjust the size of hospital according to the capacity
+    /**
+     * @author
+     * @description adjust the size of hospital according to the capacity
+     * @createTime  13/04/2021
+     */
     private Hospital() {
         int column = capacity / 100;
         height = column * 6;
@@ -45,6 +54,12 @@ public class Hospital {
         }
     }
 
+    /**
+     * @author Ethan Zhang
+     * @description add a patient to this hospital
+     * @createTime  13/04/2021
+     * @return true if add successfully, false if fail
+     */
     public boolean addPatient() {
         if (isFull()) {
             return false;
@@ -54,6 +69,11 @@ public class Hospital {
         return true;
     }
 
+    /**
+     * @author Ethan Zhang
+     * @description discharge a patient from this hospital
+     * @createTime  13/04/2021
+     */
     public void dischargePatient() {
         if (isEmpty()) {
             return;
@@ -62,26 +82,56 @@ public class Hospital {
         patients--;
     }
 
+    /**
+     * @author Ethan Zhang
+     * @description return if this hospital reaches its capacity
+     * @createTime  13/04/2021
+     */
     public boolean isFull () {
         return patients >= capacity;
     }
 
+    /**
+     * @author Ethan Zhang
+     * @description return if this hospital is empty
+     * @createTime  13/04/2021
+     */
     public boolean isEmpty () {
         return patients == 0;
     }
 
+    /**
+     * @author
+     * @description return the hospital's width
+     * @createTime  13/04/2021
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     * @author
+     * @description return the hospital's height
+     * @createTime  13/04/2021
+     */
     public int getHeight() {
         return height;
     }
 
+    /**
+     * @author
+     * @description return the hospital's capacity
+     * @createTime  13/04/2021
+     */
     public int getCapacity() {
         return capacity;
     }
 
+    /**
+     * @author
+     * @description return the hospital's remaining beds 
+     * @createTime  13/04/2021
+     */
     public int getBed() {
         return capacity - patients;
     }
