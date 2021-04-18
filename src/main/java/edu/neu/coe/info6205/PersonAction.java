@@ -138,7 +138,7 @@ public class PersonAction {
 
         // people who wear masks have lower possibility to be infected
         if (person1.getMaskState() || person2.getMaskState()) {
-            infectionRate *= 1 - ConfigUtil.get("Mask", "EFFICIENCY");
+            infectionRate *= 1 - ConfigUtil.get("MASK", "EFFICIENCY");
         }
 
         // if the first person has antibodyies, he/she has lower possibility to be infected
