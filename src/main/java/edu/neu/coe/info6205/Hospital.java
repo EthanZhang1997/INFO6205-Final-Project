@@ -37,7 +37,7 @@ public class Hospital {
     }
 
     /**
-     * @author
+     * @author Gan Li
      * @description adjust the size of hospital according to the capacity
      * @createTime  13/04/2021
      */
@@ -105,7 +105,7 @@ public class Hospital {
     }
 
     /**
-     * @author
+     * @author Gan Li
      * @description return the hospital's width
      * @createTime  13/04/2021
      */
@@ -114,7 +114,7 @@ public class Hospital {
     }
 
     /**
-     * @author
+     * @author Gan Li
      * @description return the hospital's height
      * @createTime  13/04/2021
      */
@@ -123,7 +123,7 @@ public class Hospital {
     }
 
     /**
-     * @author
+     * @author Gan Li
      * @description return the hospital's capacity
      * @createTime  13/04/2021
      */
@@ -132,7 +132,7 @@ public class Hospital {
     }
 
     /**
-     * @author
+     * @author Gan Li
      * @description return the hospital's remaining beds 
      * @createTime  13/04/2021
      */

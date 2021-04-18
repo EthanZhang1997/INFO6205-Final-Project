@@ -17,6 +17,11 @@ public class MyPanel extends JPanel implements Runnable{
         this.setBackground(new Color(0x444444));
     }
 
+    /**
+     * @author Gan Li
+     * @description paint the panel of simulation
+     * @createTime  19/04/2021
+     */
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -46,22 +51,27 @@ public class MyPanel extends JPanel implements Runnable{
         }
         for (Person p : people) {
             switch (p.getState()) {
+                // NORMAL
                 case 0: {
                     g.setColor(new Color(0xdddddd));
                     break;
                 }
+                // SHADOW
                 case 1: {
                     g.setColor(new Color(0xC69E0F));
                     break;
                 }
+                // SYMPTOMATIC
                 case 2: {
                     g.setColor(new Color(0xC60F6E));
                     break;
                 }
+                // CONFIRMED
                 case 3: {
                     g.setColor(new Color(0xE01425));
                     break;
                 }
+                // DEATH
                 case 5: {
                     g.setColor(Color.black);
                     break;
@@ -73,6 +83,7 @@ public class MyPanel extends JPanel implements Runnable{
         int y = (int) ConfigUtil.get("CITY", "HEIGHT") + Hospital.getInstance().getHeight();
         int interval = 30;
 
+        // display the state of city
         g.setColor(new Color(0xdddddd));
         g.drawString("Healthy population：" + PersonPool.getInstance().getPeopleSize(State.NORMAL), 50, y + interval);
         g.setColor(new Color(0xC69E0F));
@@ -91,38 +102,57 @@ public class MyPanel extends JPanel implements Runnable{
         g.drawString("Recovered population：" + PersonPool.getInstance().getPeopleSize(State.RECOVERED), 80 + (Hospital.X + Hospital.getInstance().getWidth()) / 2, y + 3 * interval);
 
         int needBeds = PersonPool.getInstance().getPeopleSize(State.CONFIRMED);
-
         g.setColor(new Color(0xD2710A));
         g.drawString("Bed needed：" + needBeds, 80 + (Hospital.X + Hospital.getInstance().getWidth()) / 2, y + 4 * interval);
-
         g.setColor(new Color(0xdddddd));
         g.drawString("Day: ：" + City.dayTime, 20, 20);
-
         g.setColor(new Color(0xdddddd));
         g.drawString("Total population: ：" + (int) (ConfigUtil.get("CITY", "PERSON_SIZE") + ConfigUtil.get("CITY", "INITIAL_PATIENTS")), 20, 20 + interval);
     }
 
     public Timer timer = new Timer();
 
+    // to stop simulation
+    private boolean paused = false;
+
+    public void setPaused(boolean paused) {
+        this.paused = paused;
+    }
+
+    /**
+     * @author Gan Li
+     * @description define task for timer
+     * @createTime  19/04/2021
+     */
     class MyTimerTask extends TimerTask {
         @Override
         public void run() {
-            try {
-                CsvAndPlotUtil.record();
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (!paused){
+                try {
+                    CsvAndPlotUtil.record();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                MyPanel.this.repaint();
+                // one day passed
+                List<Person> people = PersonPool.getInstance().getPersonList();
+                for (Person p : people) {
+                    p.action();
+                }
+                City.dayTime++;
             }
-            MyPanel.this.repaint();
-            List<Person> people = PersonPool.getInstance().getPersonList();
-            for (Person p : people) {
-                p.action();
-            }
-            City.dayTime++;
         }
     }
 
+    /**
+     * @author Gan Li
+     * @description define timer for to do task periodically
+     * @createTime  19/04/2021
+     */
     @Override
     public void run() {
         timer.schedule(new MyTimerTask(), 4000, 100);
     }
+
+
 }

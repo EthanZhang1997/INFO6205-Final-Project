@@ -17,7 +17,6 @@ import java.util.List;
 
 public class CsvAndPlotUtil {
 
-    private static final List<Integer> Record = new ArrayList<>();
     private static final List<Integer> Day = new ArrayList<>();
     private static final List<Integer> Normal = new ArrayList<>();
     private static final List<Integer> Shadow = new ArrayList<>();
@@ -28,6 +27,11 @@ public class CsvAndPlotUtil {
     private static final List<Integer> Recovered = new ArrayList<>();
     private static final List<Integer> Destroyed = new ArrayList<>();
 
+    /**
+     * @author Gan Li
+     * @description record the state of city
+     * @createTime  19/04/2021
+     */
     public static void record() throws IOException {
         Day.add(City.dayTime);
         Normal.add(PersonPool.getInstance().getPeopleSize(State.NORMAL));
@@ -42,23 +46,13 @@ public class CsvAndPlotUtil {
         Table table = createTable();
         write(table, "Results.csv");
         System.out.println(table.print());
-
-        // TODO: 2021/4/16 easier way to initial csv and update
-//        // Day 0
-//        Record.add(City.dayTime);
-//        if (City.dayTime == 0){
-//            Record.add((int) ConfigUtil.get("CITY", "PERSON_SIZE"));
-//            Record.add((int) ConfigUtil.get("CITY", "INITIAL_PATIENTS"));
-//            for (int i = 0; i < 5; i++){
-//                Record.add(0);
-//            }
-//        }
-//        else
-//            for (int i = 0; i <= 7; i++) {
-//                Record.add(PersonPool.getInstance().getPeopleSize(i));
-//            }
     }
 
+    /**
+     * @author Gan Li
+     * @description create table for recoding
+     * @createTime  19/04/2021
+     */
     private static Table createTable(){
         Integer [] day = new Integer[Day.size()];
         IntColumn c1 = IntColumn.create("Day", Day.toArray(day));
@@ -81,16 +75,15 @@ public class CsvAndPlotUtil {
         return Table.create(c1, c2, c3, c4, c5, c6, c7, c8, c9);
     }
 
-    // write result into csv
+    /**
+     * @author Gan Li
+     * @description write result into csv
+     * @createTime  19/04/2021
+     */
     private static void write(Table table, String path) throws IOException {
         CsvWriter writer = new CsvWriter();
         File file = new File(path);
         Destination destination = new Destination(file);
         writer.write(table, destination);
-    }
-
-    // TODO: 2021/4/16 plot chart by csv 
-    public static void plotChart(){
-
     }
 }
