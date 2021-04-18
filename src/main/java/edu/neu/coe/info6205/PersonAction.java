@@ -151,7 +151,7 @@ public class PersonAction {
 
         // if there is an infection, update the state of the newly infected patient and the infection source person
         if (isInfected) {
-            person1.setVirus(new Virus(Virus.Viruses.COVID19));
+            person1.setVirus(new Virus(Virus.Viruses.valueOf(person2.getVirus().getName())));
             person1.setState(State.SHADOW);
             person1.setInfectedTime(City.dayTime);
             person2.getVirus().makeAnInfection();

@@ -97,25 +97,76 @@ class PersonActionTest {
 
     @org.junit.jupiter.api.Test
     void infect() {
+        City city = new City();
+
+        Person p1 = new Person(0, 0, State.NORMAL);
+
+        final int maxTrialCount = 10000000;
+
+        // person who can't infect others
+        Person p2 = new Person(1, 1, State.RECOVERED);
+        for (int i = 0; i < maxTrialCount; i++) {
+            if (PersonAction.infect(p1, p2)) {
+                break;
+            }
+        }
+        assertEquals(p1.getState(), State.NORMAL);
+
+        // person who made enough number of infections
+        Person p3 = new Person(1, 1, State.CONFIRMED);
+        p3.setVirus(new Virus(Virus.Viruses.COVID19));
+        p3.getVirus().setNumberOfInfections(p3.getVirus().getMaxNumberOfInfections());
+        for (int i = 0; i < maxTrialCount; i++) {
+            if (PersonAction.infect(p1, p3)) {
+                break;
+            }
+        }
+        assertEquals(p1.getState(), State.NORMAL);
+
+        // person who may make an infection
+        Person p4 = new Person(0, 0, State.CONFIRMED);
+        p4.setVirus(new Virus(Virus.Viruses.COVID19));
+        p4.getVirus().setMaxNumberOfInfections(1);
+        for (int i = 0; i < maxTrialCount; i++) {
+            if (PersonAction.infect(p1, p4)) {
+                break;
+            }
+        }
+        assertEquals(p1.getState(), State.SHADOW);
     }
 
     @org.junit.jupiter.api.Test
     void quarantinedPersonAction() {
-    }
+        City city = new City();
+        City.dayTime = 20;
+        final int maxTrialCount = 10000000;
 
-    @org.junit.jupiter.api.Test
-    void confirmedPersonAction() {
-    }
+        Person p1 = new Person(50, 800, State.QUARANTINED);
+        p1.setVirus(new Virus(Virus.Viruses.COVID19));
+        p1.setInfectedTime(10);
+        p1.getVirus().setFatality(false);
+        p1.getVirus().setSelfCureState(true);
+        p1.getVirus().setSelfCureTime(15);
+        for (int i = 0; i < maxTrialCount; i++) {
+            PersonAction.quarantinedPersonAction(p1);
+            if (p1.getState() != State.QUARANTINED) {
+                break;
+            }
+        }
+        assertEquals(p1.getState(), State.RECOVERED);
 
-    @org.junit.jupiter.api.Test
-    void symptomaticPersonAction() {
     }
 
     @org.junit.jupiter.api.Test
     void shadowPersonAction() {
-    }
+        City city = new City();
+        City.dayTime = 20;
 
-    @org.junit.jupiter.api.Test
-    void normalAndRecoveredPersonAction() {
+        Person p1 = new Person(0, 0, State.SHADOW);
+        p1.setVirus(new Virus(Virus.Viruses.COVID19));
+        p1.setInfectedTime(10);
+        p1.getVirus().setShadowTime(10);
+        PersonAction.shadowPersonAction(p1);
+        assertEquals(p1.getState(), State.SYMPTOMATIC);
     }
 }

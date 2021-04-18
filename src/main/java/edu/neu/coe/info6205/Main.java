@@ -31,5 +31,11 @@ public class Main {
         frame.setTitle(v + " Simulation");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         panelThread.start();
+
+        while (true) {
+            if (City.dayTime >= 100) {
+                panelThread.suspend();
+            }
+        }
     }
 }

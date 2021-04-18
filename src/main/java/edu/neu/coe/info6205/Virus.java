@@ -48,7 +48,7 @@ public class Virus {
     private int numberOfInfections;
 
     // max number of infections could made by this virus
-    private final int maxNumberOfInfections;
+    private int maxNumberOfInfections;
 
     // whether this virus can lead to death
     private boolean fatality;
@@ -135,6 +135,18 @@ public class Virus {
 
     public int getNumberOfInfections() {
         return numberOfInfections;
+    }
+
+    public void setNumberOfInfections(int numberOfInfections) {
+        this.numberOfInfections = numberOfInfections;
+    }
+
+    public int getMaxNumberOfInfections() {
+        return maxNumberOfInfections;
+    }
+
+    public void setMaxNumberOfInfections(int maxNumberOfInfections) {
+        this.maxNumberOfInfections = maxNumberOfInfections;
     }
 
     /**
