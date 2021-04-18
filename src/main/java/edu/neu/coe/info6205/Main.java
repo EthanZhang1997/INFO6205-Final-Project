@@ -6,8 +6,17 @@ import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
+        // create a new city
+        City city = new City();
+
+        // add initial citizens to the city
+        PersonPool.getInstance().addInitialCitizens();
+
+        // add initial patients to the city
         Virus.Viruses v = Virus.Viruses.COVID19;
-        City city = new City(v);
+        PersonPool.getInstance().addInitialPatients(v);
+
+        // initialize the panel
         initPanel(v.toString());
     }
 

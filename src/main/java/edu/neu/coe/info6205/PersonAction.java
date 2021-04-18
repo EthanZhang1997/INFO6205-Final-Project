@@ -91,12 +91,14 @@ public class PersonAction {
     public static boolean beDestroyed(Person person1) {
         // if the virus is not fatal but it can't be cured by people themselves, this patient has chance to recover with aftereffect
         if (!person1.getVirus().getFatality() && !person1.getVirus().getSelfCureState()) {
-            person1.setState(State.DESTROYED);
-            person1.setDestroyedTime(City.dayTime);
-            person1.setContactTraceState(false);
-            person1.setInfectedTime(-1);
-            person1.setVirus(null);
-            return true;
+            if (getResultForProbability(ConfigUtil.get(person1.getVirus().getName(), "DESTROYED_RATE"))) {
+                person1.setState(State.DESTROYED);
+                person1.setDestroyedTime(City.dayTime);
+                person1.setContactTraceState(false);
+                person1.setInfectedTime(-1);
+                person1.setVirus(null);
+                return true;
+            }
         }
         return false;
     }

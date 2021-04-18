@@ -55,7 +55,17 @@ public class PersonPool {
 
     /**
      * @author Ethan Zhang
-     * @description add new person to the person pool
+     * @description add a new person to the person pool
+     * @createTime  13/04/2021
+     * @param p the person added to the pool
+     */
+    public void addNewPersonToPool(Person p) {
+        personList.add(p);
+    }
+
+    /**
+     * @author Ethan Zhang
+     * @description generate a new person for the person pool
      * @createTime  13/04/2021
      * @param state the state of the person, v the virus this person carrys
      */
@@ -89,13 +99,14 @@ public class PersonPool {
 
     /**
      * @author Ethan Zhang
-     * @description add normal persons to the pool, constructor for this class
-     * @createTime  13/04/2021
-     */
-    private PersonPool() {
-        // add normal persons to the pool
+     * @description add add normal persons to the pool
+     * @createTime  18/04/2021
+     **/
+    public void addInitialCitizens() {
         for (int i = 0; i < ConfigUtil.get("CITY", "PERSON_SIZE"); i++) {
             addNewPersonToPool(State.NORMAL, null);
         }
     }
+
+    private PersonPool() { }
 }

@@ -16,14 +16,12 @@ public class City {
 
     /**
      * @author Ethan Zhang
-     * @description constructor for this city, initialize it with center coordinate and the patients in the city
+     * @description constructor for this city, initialize it with center coordinate
      * @createTime  13/04/2021
-     * @param v the virus which is popular in the city
      */
-    public City(Virus.Viruses v) {
+    public City() {
         this.centerX = (int) ConfigUtil.get("CITY", "CENTERX");
         this.centerY = (int) ConfigUtil.get("CITY", "CENTERY");
-        PersonPool.getInstance().addInitialPatients(v);
     }
 
     /**
