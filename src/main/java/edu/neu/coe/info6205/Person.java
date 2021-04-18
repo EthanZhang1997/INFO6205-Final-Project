@@ -42,6 +42,8 @@ public class Person {
     public Person(Point p, int state) {
         this.p = p;
         this.state = state;
+        this.isMasked = getResultForProbability(ConfigUtil.get("MASK", "USAGE"));
+        this.isVaccined = getResultForProbability(ConfigUtil.get("VACCINE", "AVAILABILITY"));
     }
 
     public Person(int x, int y, int state) {
