@@ -90,10 +90,10 @@ public class MyPanel extends JPanel implements Runnable{
         g.setColor(new Color(0x14A6E0));
         g.drawString("Recovered population：" + PersonPool.getInstance().getPeopleSize(State.RECOVERED), 80 + (Hospital.X + Hospital.getInstance().getWidth()) / 2, y + 3 * interval);
 
-        int needBeds = PersonPool.getInstance().getPeopleSize(State.CONFIRMED) - Hospital.getInstance().getCapacity();
+        int needBeds = PersonPool.getInstance().getPeopleSize(State.CONFIRMED);
 
         g.setColor(new Color(0xD2710A));
-        g.drawString("Bed needed：" + (Hospital.getInstance().isFull() ? needBeds : 0), 80 + (Hospital.X + Hospital.getInstance().getWidth()) / 2, y + 4 * interval);
+        g.drawString("Bed needed：" + needBeds, 80 + (Hospital.X + Hospital.getInstance().getWidth()) / 2, y + 4 * interval);
 
         g.setColor(new Color(0xdddddd));
         g.drawString("Day: ：" + City.dayTime, 20, 20);

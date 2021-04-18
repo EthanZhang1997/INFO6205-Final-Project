@@ -54,7 +54,6 @@ public class PersonAction {
         // if the virus is fatal, and the current time reaches the person's die time, make this person die
         if (person1.getVirus().getFatality() && City.dayTime >= person1.getInfectedTime() + person1.getVirus().getDieTime()) {
             person1.setState(State.DEATH);
-            Hospital.getInstance().dischargePatient();
             return true;
         }
         return false;

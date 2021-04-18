@@ -28,6 +28,10 @@ public class Hospital {
 
     private List<Bed> beds = new ArrayList<>();
 
+    public int getNumberOfPatients() {
+        return patients;
+    }
+
     public List<Bed> getBeds() {
         return beds;
     }
