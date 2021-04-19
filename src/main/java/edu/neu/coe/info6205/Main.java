@@ -72,12 +72,5 @@ public class Main {
 
         // start panel thread
         panelThread.start();
-
-        // stop simulation after 100 days
-        while (true) {
-            if (City.dayTime >= 100) {
-                p.setPaused(true);
-            }
-        }
     }
 }
