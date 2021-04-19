@@ -9,3 +9,4 @@ Division of labor：
 Linxin Liu for documenting and drawing of charts
 Tianqi Zhang for modeling and most part of codes
 Gan Li for UI and part of the modeling, including the definition of K & R factor
+
