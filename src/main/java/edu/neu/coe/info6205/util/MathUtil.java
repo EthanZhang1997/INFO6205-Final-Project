@@ -35,17 +35,6 @@ public class MathUtil {
 
     /**
      * @author Ethan Zhang
-     * @description get the random displacement around a person's step
-     * @createTime  13/04/2021
-     * @return the displacement
-     */
-    public static int randomDisplacement() {
-        double X = randomGen.nextGaussian();
-        return (int) (ConfigUtil.get("PERSON", "STEP") * X);
-    }
-
-    /**
-     * @author Ethan Zhang
      * @description format a person's coordinate, if it's out of bounds, just set it at the bound line
      * @createTime  13/04/2021
      * @param p the person's coordinate

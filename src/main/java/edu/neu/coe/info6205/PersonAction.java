@@ -10,7 +10,7 @@ import static edu.neu.coe.info6205.util.MathUtil.*;
 public class PersonAction {
 
     // a person's step (average distance a single person can move in one day)
-    private final static int step = 10;
+    private final static int step = (int) ConfigUtil.get("PERSON", "STEP");
 
     /**
      * @author Ethan Zhang
