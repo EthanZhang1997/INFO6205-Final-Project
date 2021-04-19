@@ -1,16 +1,11 @@
 package edu.neu.coe.info6205;
 
 import edu.neu.coe.info6205.util.ConfigUtil;
-import edu.neu.coe.info6205.util.CsvAndPlotUtil;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Main {
     public static void main(String[] args) {
@@ -32,19 +27,32 @@ public class Main {
         MyPanel p = new MyPanel();
         Thread panelThread = new Thread(p);
         JFrame frame = new JFrame();
-        frame.setLayout(new GridLayout ());
         frame.add(p);
 
+        // add buttons
         JButton jbStart = new JButton("Start");
         JButton jbEnd = new JButton("Stop");
         p.add(jbStart);
         p.add(jbEnd);
 
-        frame.setSize((int) ConfigUtil.get("CITY", "WIDTH"), (int) ConfigUtil.get("CITY", "HEIGHT") + Hospital.getInstance().getHeight() + 200);
+        int h = (int) ConfigUtil.get("CITY", "HEIGHT") + Hospital.getInstance().getHeight() + 200;
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setSize((int) ConfigUtil.get("CITY", "WIDTH"), h);
+
+        // set scroll if frame's height is larger than screen's
+        if (h > screenSize.height) {
+            JScrollPane scrollPane = new JScrollPane(p);
+            scrollPane.setBounds(100, 100, 100, h);
+            p.setPreferredSize(new Dimension(scrollPane.getWidth() - 50, scrollPane.getHeight()));
+            frame.add(scrollPane);
+            p.revalidate();
+        }
+
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         frame.setTitle(v + " Simulation");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 
         // click button to restart simulation
         jbStart.addActionListener(new ActionListener() {
@@ -62,6 +70,7 @@ public class Main {
             }
         });
 
+        // start panel thread
         panelThread.start();
 
         // stop simulation after 100 days
