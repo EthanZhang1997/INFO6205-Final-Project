@@ -48,7 +48,7 @@ public class Hospital {
 
             for (int j = 0; j <= 596; j += 6) {
 
-                Bed bed = new Bed(point.getX() + j, point.getY() + i * 6);
+                Bed bed = new Bed(point.getX() + j + 1, point.getY() + i * 6 + 1);
                 beds.add(bed);
                 if (beds.size() >= capacity) {
                     break;

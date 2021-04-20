@@ -24,6 +24,12 @@ public class MathUtil {
         return sigma * X + u;
     }
 
+    /**
+     * @author Gan Li
+     * @description get the infection number by K and R factor using negative binomial distribution function
+     * @createTime  17/04/2021
+     * @return
+     */
     public static int getInfectNumberFromNB(float r, float k){
         double u = 1 - randomGen.nextDouble();
         //Get p from definition - mean = n(1 - p)/p

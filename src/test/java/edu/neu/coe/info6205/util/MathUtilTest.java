@@ -2,10 +2,22 @@ package edu.neu.coe.info6205.util;
 
 import edu.neu.coe.info6205.Point;
 import org.junit.jupiter.api.Test;
+import umontreal.iro.lecuyer.probdist.NegativeBinomialDist;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class MathUtilTest {
+
+    @Test
+    void getInfectNumberFromNB(){
+        float k = 0.1f;
+        float  r = 3;
+        double p = (double) k / (r + k);
+        NegativeBinomialDist nb = new NegativeBinomialDist(k, p);
+
+        //mean of created negative binomial distribution is r
+        assertEquals(r, Math.ceil(nb.getMean()));
+    }
 
     @Test
     void formatCoordinate() {
